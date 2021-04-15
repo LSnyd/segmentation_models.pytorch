@@ -1,4 +1,5 @@
 import functools
+import torch
 import torch.utils.model_zoo as model_zoo
 
 from .resnet import resnet_encoders
@@ -53,7 +54,7 @@ def get_encoder(name, in_channels=3, depth=5, weights=None):
             settings = encoders[name]["pretrained_settings"][weights]
             encoder.load_state_dict(model_zoo.load_url(settings["url"]))
         except KeyError:
-            encoder.load_state_dict(weights)
+            encoder.load_state_dict(torch.load(weights))
 
            # raise KeyError("Wrong pretrained weights `{}` for encoder `{}`. Available options are: {}".format(
             #    weights, name, list(encoders[name]["pretrained_settings"].keys()),
