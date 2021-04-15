@@ -47,7 +47,7 @@ def get_encoder(name, in_channels=3, depth=5, weights=None):
     params.update(depth=depth)
     encoder = Encoder(**params)
 
-    if weights is not None:
+    if weights in encoders[name]["pretrained_settings"][weights]:
         try:
             settings = encoders[name]["pretrained_settings"][weights]
         except KeyError:
@@ -55,6 +55,10 @@ def get_encoder(name, in_channels=3, depth=5, weights=None):
                 weights, name, list(encoders[name]["pretrained_settings"].keys()),
             ))
         encoder.load_state_dict(model_zoo.load_url(settings["url"]))
+
+    if weights is not None and weights not in encoders[name]["pretrained_settings"][weights]:
+        encoder.load_state_dict(weights)
+
 
     encoder.set_in_channels(in_channels)
 
