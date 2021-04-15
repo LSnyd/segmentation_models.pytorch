@@ -47,8 +47,6 @@ def get_encoder(name, in_channels=3, depth=5, weights=None):
     params.update(depth=depth)
     encoder = Encoder(**params)
 
-    print("ënc", encoders[name]["pretrained_settings"][weights])
-    print("listënc", list(encoders[name]["pretrained_settings"][weights]))
 
     if weights is not None:
         try:
