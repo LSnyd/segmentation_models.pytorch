@@ -50,18 +50,16 @@ def get_encoder(name, in_channels=3, depth=5, weights=None):
     print("ënc", encoders[name]["pretrained_settings"][weights])
     print("listënc", list(encoders[name]["pretrained_settings"][weights]))
 
-    if weights in list(encoders[name]["pretrained_settings"][weights]):
+    if weights is not None:
         try:
             settings = encoders[name]["pretrained_settings"][weights]
+            encoder.load_state_dict(model_zoo.load_url(settings["url"]))
         except KeyError:
-            raise KeyError("Wrong pretrained weights `{}` for encoder `{}`. Available options are: {}".format(
-                weights, name, list(encoders[name]["pretrained_settings"].keys()),
-            ))
-        encoder.load_state_dict(model_zoo.load_url(settings["url"]))
+            encoder.load_state_dict(weights)
 
-    if weights not in list(encoders[name]["pretrained_settings"][weights]) and weights is not None:
-        encoder.load_state_dict(weights)
-
+           # raise KeyError("Wrong pretrained weights `{}` for encoder `{}`. Available options are: {}".format(
+            #    weights, name, list(encoders[name]["pretrained_settings"].keys()),
+            #))
 
 
     encoder.set_in_channels(in_channels)
